@@ -12,37 +12,39 @@ const Shop = () => {
         fetch("products.json")
             .then(res => res.json())
             .then(data => {
-
                 setProducts(data)
                 console.log('products loaded')
             })
     }, [])
-    useEffect(() => {
-        console.log('first localstorage package', products)
-        const storedCart = getStoredCart()
-        const savedCart = []
-        for (const id in storedCart) {
-            const addProduct = products.find(product => product.id == id)
-            // console.log(addProduct)
-            if (addProduct) {
-                const quantity = storedCart[id]
-                addProduct.quantity = quantity
-                console.log(addProduct)
-                savedCart.push(addProduct)
-            }
-        }
-        setCart(savedCart)
-        console.log("finish local storage")
-    }, [products])
-
     // const handleClick = (product) => {
     //     console.log(product)
     // }
-    const handleClick = (product) => {
-        // console.log(product)
-        const newArray = [...cart, product]
-        setCart(newArray)
-        addToDb(product.id)
+    useEffect(() => {
+        const storedCart = getStoredCart()
+        const savedCart = []
+        for (const id in storedCart) {
+            const addedProduct = products.find(product => product.id === id)
+            if (addedProduct) {
+                const quantity = storedCart[id]
+                addedProduct.quantity = quantity
+                savedCart.push()
+            }
+        }
+        setCart(savedCart)
+    }, [])
+    const handleClick = (selectedProduct) => {
+        console.log(selectedProduct)
+        let newCart = []
+        const exists = cart.find(product => product.id === selectedProduct.id)
+        if (!exists) {
+            selectedProduct.quantity = 1
+            newCart = [...cart, selectedProduct]
+        }
+        else {
+
+        }
+        setCart(newCart)
+        addToDb(selectedProduct.id)
     }
 
     return (
